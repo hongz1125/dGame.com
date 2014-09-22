@@ -40,7 +40,9 @@
 	loadingDiv,
 	readyDiv,
 	mainDiv,
-	imageJson;
+	imageJson,
+	list=0,
+	listCol=19;
 	
 	
 	//创建一个总画布
@@ -145,17 +147,25 @@
 		var ball = new Sprite("ball");
 		
 		//精灵
+		
+		list = dyadicArray(1900,100,1,19);
+		listCol--;
+		listCol = listCol<=0 ? 18 : listCol;
+		//console.log(list[0][listCol].x,list[0][listCol].y)
 		you
 			.dom(imageJson.you)
-			.width(imageJson.you.width)
-			.height(imageJson.you.height)
+			.sx(list[0][listCol].x+1)
+			.sy(list[0][listCol].y+1)
+			.swidth(100)
+			.sheight(100)
 			.x(10)
 			.y(200)
+			.width(100)
+			.height(100)
 			.content(function(){
 				this.drawImage();
-			});	
+			})
 			
-		var list = 
 		sister
 			.dom(imageJson.sister)
 			.width(imageJson.sister.width)
@@ -174,7 +184,7 @@
 			.y(10)
 			.content(function(){
 				this.drawImage();
-			})	
+			})
 		
 		//层绘制
 		mainDiv
@@ -187,6 +197,11 @@
 		body
 			.clearRect()
 			.drawImage(mainDiv);
+		setTimeout(gameStar,100)
+	}
+	
+	function gameUp(){
+		requestAnimationFrame(gameUp)
 	}
 	
 	

@@ -29,6 +29,13 @@
 		}
 	}
 	b.prototype = new a();
+	b.prototype.content = function(FUN){
+		if(FUN){
+			this.content = FUN;
+		}
+	}
+	
+	
 	//b.prototype.constructor = b;
 	b.prototype.nameaaa = function(){
 		return this.namea;
@@ -39,11 +46,15 @@
 	
 	var c = new b();
 	c.namec = "ccc";
-	console.dir(a)
-	console.dir(b)
-	console.dir(c)
+	c.content(function(){
+		return 3455;
+	})
+	
+	//console.dir(a)
+	//console.dir(b)
+	//console.dir(c)
 	console.log("----------------------")
-	console.dir(c.nameaaaa())
+	console.log(c.content())
 	console.log("----------------------")
 	
 </script>

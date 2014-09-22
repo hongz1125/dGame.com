@@ -9,7 +9,7 @@ function mouseToSprite(event,sprite){
 		y1 = sprite.y(),
 		x2 = sprite.x() + sprite.width(),
 		y2 = sprite.y() + sprite.height();
-	console.log(x,y,x1,y1,x2,y2)
+	//console.log(x,y,x1,y1,x2,y2)
 	return (x1<x && x<x2)&&(y1<y&&y<y2);
 }
 /*

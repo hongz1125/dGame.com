@@ -18,10 +18,11 @@ Base.prototype.addSprite = function(sprite){
 	var self = this;
 	sprite.ctx = self.ctx;
 	self.ctx.beginPath();
-	sprite._content();
+	sprite.content(sprite);
 	self.ctx.closePath();
 	return self;
 }
+
 
 //-----------------------------------精灵事件
 Base.prototype.on = function(type,FUN){
@@ -38,7 +39,66 @@ Base.prototype.off = function(type,sprite){
 
 
 //------------------------------------属性
-
+//图片获取X定位
+Base.prototype.sx = function(num){
+	var self = this;
+	if(num){
+		self._sx = num;
+		return self;
+	}else{
+		return self._sx
+	}
+}
+//图片获取Y定位
+Base.prototype.sy = function(num){
+	var self = this;
+	if(num){
+		self._sy = num;
+		return self;
+	}else{
+		return self._sy
+	}
+}
+//图片获取宽度
+Base.prototype.swidth = function(num){
+	var self = this;
+	if(num){
+		self._swidth = num;
+		return self;
+	}else{
+		return self._swidth
+	}
+}
+//图片获取高度
+Base.prototype.sheight = function(num){
+	var self = this;
+	if(num){
+		self._sheight = num;
+		return self;
+	}else{
+		return self._sheight
+	}
+}
+//x
+Base.prototype.x = function(num){
+	var self = this;
+	if(num){
+		self._x = num;
+		return self;
+	}else{
+		return self._x
+	}
+}
+//y
+Base.prototype.y = function(num){
+	var self = this;
+	if(num){
+		self._y = num;
+		return self;
+	}else{
+		return self._y
+	}
+}
 //宽度
 Base.prototype.width = function(num){
 	var self = this;
@@ -60,27 +120,6 @@ Base.prototype.height = function(num){
 	}
 }
 
-//x
-Base.prototype.x = function(num){
-	var self = this;
-	if(num){
-		self._x = num;
-		return self;
-	}else{
-		return self._x
-	}
-}
-//y
-Base.prototype.y = function(num){
-	var self = this;
-	if(num){
-		self._y = num;
-		return self;
-	}else{
-		return self._y
-	}
-}
-
 //------------------------------------宽高
 //精灵dom
 Base.prototype.dom = function(dom){
@@ -93,13 +132,21 @@ Base.prototype.dom = function(dom){
 	}
 }
 
-//----------------------------------------------------------------------
+//--------------------------------------------精灵方法
 
 //图片写入
-Base.prototype.drawImage = function(div){
+Base.prototype.drawImage = function(D){
 	var self = this;
-	var sprite = div || self;
-	self.ctx.drawImage(sprite.dom,sprite.x(),sprite.y(),sprite.width(),sprite.height());
+	var D = D ||　self;
+	if(D._sx && D._sy && D._swidth && D._sheight && D._x && D._y && D._width && D._height){
+		self.ctx.drawImage(D.dom,D._sx,D._sy,D._swidth,D._sheight,D._x,D._y,D._width,D._height);	
+		return self;
+	}
+	if(D._x && D._y && D._width && D._height){
+		self.ctx.drawImage(D.dom,D._x,D._y,D._width,D._height);	
+		return self;
+	}
+	self.ctx.drawImage(D.dom,D._x,D._y);
 	return self;
 }
 

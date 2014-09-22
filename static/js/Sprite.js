@@ -14,7 +14,7 @@ function Sprite(name){
 Sprite.prototype = new Base();
 //精灵自身绘画方法
 Sprite.prototype.content = function(FUN){
-	this._content = FUN;
+	this.content = FUN;
 }
 
 
