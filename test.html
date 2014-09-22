@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+</head>
+
+<body style="background:#fefefe">
+
+<canvas id="demo" width="500" height="300" style="background:#f1f1f1"></canvas>
+
+<script>
+	
+	function a(){
+		this.namea = "a";
+		this.nameaa = function(){
+			return  this.namea;
+		}
+	}
+	a.prototype.nameaaa = function(){
+		return this.namea;
+	}
+	a.prototype.nameaaaa = function(){
+		return 123123;
+	}	
+	function b(){
+		this.namea = "b";
+		this.namebb = function(){
+			return this.nameb;
+		}
+	}
+	b.prototype = new a();
+	//b.prototype.constructor = b;
+	b.prototype.nameaaa = function(){
+		return this.namea;
+	}
+	b.prototype.nameaaaa = function(){
+		return 1111;
+	}
+	
+	var c = new b();
+	c.namec = "ccc";
+	console.dir(a)
+	console.dir(b)
+	console.dir(c)
+	console.log("----------------------")
+	console.dir(c.nameaaaa())
+	console.log("----------------------")
+	
+</script>
+</body>
+</html>

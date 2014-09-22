@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+</head>
+
+<body style="background:#fefefe">
+
+<canvas id="demo" width="500" height="300" style="background:#f1f1f1"></canvas>
+
+<script src="static/js/preloadImages.js"></script>
+<script src="static/js/requestAnimationFrame.js"></script>
+<script src="static/js/Base.js"></script>
+<script src="static/js/bump.js"></script>
+<script src="static/js/Body.js"></script>
+<script src="static/js/Div.js"></script>
+<script src="static/js/Sprite.js"></script>
+
+
+<script>
+	var imageAry = [
+		{
+			id:"sister",
+			src:"static/images/sister.png"
+		},
+		{
+			id:"you",
+			src:"static/images/you.png"
+		},
+		{
+			id:"ball",
+			src:"static/images/ball.png"
+		},
+		{
+			id:"demo1",
+			src:"static/images/demo1.jpg"
+		}
+	],
+	body,
+	loadingDiv,
+	readyDiv,
+	mainDiv,
+	imageJson;
+	
+	
+	//创建一个总画布
+	body = new Body("demo");
+	
+	imgLoad({
+		imageAry:imageAry,
+		callCenter:gameLoader,
+		callReady:gameReady
+	})
+	
+	
+	function gameLoader(i,j){
+		loadingDiv = new Div("loadingDiv");
+		var background = new Sprite();
+		var text = new Sprite();
+		//精灵
+		background
+			.width(loadingDiv.width())
+			.height(loadingDiv.height())
+			.content(function(){
+				this.fillStyle("black")
+					.fillRect();
+			});
+		text
+			.width(loadingDiv.width())
+			.height(loadingDiv.height())
+			.content(function(){
+				this.fillStyle("white")
+					.textAlign("center")
+					.textBaseline("middle")
+					.font("bold 20px/40px Georgia")
+					.fillText(i+"/"+j);
+			});
+		//层绘制
+		loadingDiv
+			.clearRect()
+			.addSprite(background)
+			.addSprite(text);
+		
+		//主层绘制
+		body
+			.clearRect()
+			.drawImage(loadingDiv);
+	}
+
+	function gameReady(json){
+		imageJson = json;
+		
+		readyDiv = new Div("readyDiv");
+		var background = new Sprite();
+		var start = new Sprite();
+		
+		//精灵
+		background
+			.width(loadingDiv.width())
+			.height(loadingDiv.height())
+			.content(function(){
+				this
+					.fillStyle("black")
+					.fillRect();
+			});
+		
+		start
+			.width(100)
+			.height(40)
+			.x(loadingDiv.width()/2 - 100/2)
+			.y(loadingDiv.height()/2 - 40/2)
+			.content(function(){
+				this
+					.fillStyle("#aaa")
+					.fillRect()
+					.fillStyle("#fff")
+					.textAlign("center")
+					.textBaseline("middle")
+					.fillText("开始");
+			});
+		start.mousedown = function(event){
+			if(!mouseToSprite(event,start)){return false;};
+			body.off("mousedown",start.mousedown);//取消事件
+			gameStar();//运行游戏开始
+		}
+		//层绘制
+		readyDiv
+			.clearRect()
+			.addSprite(background)
+			.addSprite(start);
+		
+		//事件
+		body.on("mousedown",start.mousedown)
+
+		//主层绘制
+		body
+			.clearRect()
+			.drawImage(readyDiv);
+	}
+	
+	function gameStar(){
+		mainDiv = new Div("mainDiv");
+		var you = new Sprite("you");
+		var sister = new Sprite("sister");
+		var ball = new Sprite("ball");
+		
+		//精灵
+		you
+			.dom(imageJson.you)
+			.width(imageJson.you.width)
+			.height(imageJson.you.height)
+			.x(10)
+			.y(200)
+			.content(function(){
+				this.drawImage();
+			});	
+			
+		var list = 
+		sister
+			.dom(imageJson.sister)
+			.width(imageJson.sister.width)
+			.height(imageJson.sister.height)
+			.x(10)
+			.y(10)
+			.content(function(){
+				this.drawImage();
+			});
+
+		ball
+			.dom(imageJson.ball)
+			.width(imageJson.ball.width)
+			.height(imageJson.ball.height)
+			.x(200)
+			.y(10)
+			.content(function(){
+				this.drawImage();
+			})	
+		
+		//层绘制
+		mainDiv
+			.clearRect()
+			.addSprite(you)
+			.addSprite(sister)
+			.addSprite(ball);
+		
+		//主层绘制
+		body
+			.clearRect()
+			.drawImage(mainDiv);
+	}
+	
+	
+</script>
+</body>
+</html>
