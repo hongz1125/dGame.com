@@ -13,8 +13,8 @@ function Sprite(name){
 //继承
 Sprite.prototype = new Base();
 //精灵自身绘画方法
-Sprite.prototype.content = function(FUN){
-	this.content = FUN;
+Sprite.prototype.content = function(){
+	//this.content = FUN;
 }
 
 

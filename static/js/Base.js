@@ -6,7 +6,6 @@ function Base(){
 	self._height = 0;
 }
 
-
 //-------------------------------------层
 Base.prototype.clearRect = function(){
 	var self= this;
@@ -17,26 +16,11 @@ Base.prototype.clearRect = function(){
 Base.prototype.addSprite = function(sprite){
 	var self = this;
 	sprite.ctx = self.ctx;
-	self.ctx.beginPath();
-	sprite.content(sprite);
-	self.ctx.closePath();
+	sprite.ctx.beginPath();
+	sprite.content();
+	sprite.ctx.closePath();
 	return self;
 }
-
-
-//-----------------------------------精灵事件
-Base.prototype.on = function(type,FUN){
-	var self = this;
-	self.dom.addEventListener(type,FUN,false);
-	return self;
-}
-Base.prototype.off = function(type,sprite){
-	var self = this;
-	self.dom.removeEventListener(type,sprite,false);
-	return self;
-}
-
-
 
 //------------------------------------属性
 //图片获取X定位
@@ -52,7 +36,7 @@ Base.prototype.sx = function(num){
 //图片获取Y定位
 Base.prototype.sy = function(num){
 	var self = this;
-	if(num){
+	if(num != undefined){
 		self._sy = num;
 		return self;
 	}else{
@@ -62,7 +46,7 @@ Base.prototype.sy = function(num){
 //图片获取宽度
 Base.prototype.swidth = function(num){
 	var self = this;
-	if(num){
+	if(num != undefined){
 		self._swidth = num;
 		return self;
 	}else{
@@ -72,7 +56,7 @@ Base.prototype.swidth = function(num){
 //图片获取高度
 Base.prototype.sheight = function(num){
 	var self = this;
-	if(num){
+	if(num != undefined){
 		self._sheight = num;
 		return self;
 	}else{
@@ -82,7 +66,7 @@ Base.prototype.sheight = function(num){
 //x
 Base.prototype.x = function(num){
 	var self = this;
-	if(num){
+	if(num != undefined){
 		self._x = num;
 		return self;
 	}else{
@@ -92,7 +76,7 @@ Base.prototype.x = function(num){
 //y
 Base.prototype.y = function(num){
 	var self = this;
-	if(num){
+	if(num != undefined){
 		self._y = num;
 		return self;
 	}else{
@@ -102,7 +86,7 @@ Base.prototype.y = function(num){
 //宽度
 Base.prototype.width = function(num){
 	var self = this;
-	if(num){
+	if(num != undefined){
 		self._width = num;
 		return self;
 	}else{
@@ -112,7 +96,7 @@ Base.prototype.width = function(num){
 //高度
 Base.prototype.height = function(num){
 	var self = this;
-	if(num){
+	if(num != undefined){
 		self._height = num;
 		return self;
 	}else{
@@ -138,6 +122,7 @@ Base.prototype.dom = function(dom){
 Base.prototype.drawImage = function(D){
 	var self = this;
 	var D = D ||　self;
+	console.log(D)
 	if(D._sx && D._sy && D._swidth && D._sheight && D._x && D._y && D._width && D._height){
 		self.ctx.drawImage(D.dom,D._sx,D._sy,D._swidth,D._sheight,D._x,D._y,D._width,D._height);	
 		return self;

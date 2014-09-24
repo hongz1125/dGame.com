@@ -7,5 +7,6 @@ function Body(id){
 	self.ctx = self.dom.getContext("2d");
 	self._width = self.dom.width;
 	self._height = self.dom.height;
+	Base.prototype.body = self;
 }
 Body.prototype = new Base();

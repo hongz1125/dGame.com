@@ -5,7 +5,6 @@
 </head>
 
 <body style="background:#fefefe">
-
 <canvas id="demo" width="500" height="300" style="background:#f1f1f1"></canvas>
 
 <script src="static/js/preloadImages.js"></script>
@@ -13,6 +12,7 @@
 <script src="static/js/Base.js"></script>
 <script src="static/js/bump.js"></script>
 <script src="static/js/Body.js"></script>
+<script src="static/js/Event.js"></script>
 <script src="static/js/Div.js"></script>
 <script src="static/js/Sprite.js"></script>
 
@@ -42,10 +42,10 @@
 	mainDiv,
 	imageJson,
 	list=0,
-	listCol=19;
+	listCol=0;
 	
 	
-	//创建一个总画布
+	//初始化游戏
 	body = new Body("demo");
 	
 	imgLoad({
@@ -57,26 +57,26 @@
 	
 	function gameLoader(i,j){
 		loadingDiv = new Div("loadingDiv");
-		var background = new Sprite();
-		var text = new Sprite();
+		var background = new Sprite("background");
+		var text = new Sprite("text");
 		//精灵
 		background
 			.width(loadingDiv.width())
-			.height(loadingDiv.height())
-			.content(function(){
-				this.fillStyle("black")
-					.fillRect();
-			});
+			.height(loadingDiv.height());
+		background.content = function(){
+			this.fillStyle("black")
+				.fillRect();
+		}
 		text
 			.width(loadingDiv.width())
-			.height(loadingDiv.height())
-			.content(function(){
-				this.fillStyle("white")
-					.textAlign("center")
-					.textBaseline("middle")
-					.font("bold 20px/40px Georgia")
-					.fillText(i+"/"+j);
-			});
+			.height(loadingDiv.height());
+		text.content = function(){
+			this.fillStyle("white")
+				.textAlign("center")
+				.textBaseline("middle")
+				.font("bold 20px/40px Georgia")
+				.fillText(i+"/"+j);
+		};
 		//层绘制
 		loadingDiv
 			.clearRect()
@@ -99,30 +99,29 @@
 		//精灵
 		background
 			.width(loadingDiv.width())
-			.height(loadingDiv.height())
-			.content(function(){
-				this
-					.fillStyle("black")
-					.fillRect();
-			});
+			.height(loadingDiv.height());
+		background.content = function(){
+			this.fillStyle("black")
+				.fillRect();
+		};
 		
 		start
 			.width(100)
 			.height(40)
 			.x(loadingDiv.width()/2 - 100/2)
 			.y(loadingDiv.height()/2 - 40/2)
-			.content(function(){
-				this
-					.fillStyle("#aaa")
+		start.content = function(){
+				this.fillStyle("#aaa")
 					.fillRect()
 					.fillStyle("#fff")
 					.textAlign("center")
 					.textBaseline("middle")
 					.fillText("开始");
-			});
-		start.mousedown = function(event){
+		};
+		start.on("click",startClick);
+		function startClick(event){
 			if(!mouseToSprite(event,start)){return false;};
-			body.off("mousedown",start.mousedown);//取消事件
+			start.off("mouseup",startClick);//取消事件
 			gameStar();//运行游戏开始
 		}
 		//层绘制
@@ -131,9 +130,6 @@
 			.addSprite(background)
 			.addSprite(start);
 		
-		//事件
-		body.on("mousedown",start.mousedown)
-
 		//主层绘制
 		body
 			.clearRect()
@@ -149,22 +145,27 @@
 		//精灵
 		
 		list = dyadicArray(1900,100,1,19);
-		listCol--;
-		listCol = listCol<=0 ? 18 : listCol;
-		//console.log(list[0][listCol].x,list[0][listCol].y)
+		
+		
 		you
 			.dom(imageJson.you)
-			.sx(list[0][listCol].x+1)
-			.sy(list[0][listCol].y+1)
+			.sx(list[0][1].x)
+			.sy(list[0][1].y)
 			.swidth(100)
 			.sheight(100)
 			.x(10)
 			.y(200)
 			.width(100)
-			.height(100)
-			.content(function(){
-				this.drawImage();
-			})
+			.height(100);
+		you.content = function(){
+			this.drawImage();
+		};
+		you.doThrow = function(){
+			listCol++;
+			listCol = listCol>=19 ? 19 : listCol;
+			you.sx(list[0][listCol].x)
+				.sy(list[0][listCol].y)
+		}
 			
 		sister
 			.dom(imageJson.sister)
@@ -172,37 +173,27 @@
 			.height(imageJson.sister.height)
 			.x(10)
 			.y(10)
-			.content(function(){
-				this.drawImage();
-			});
+		sister.content = function(){
+			this.drawImage();
+		};
 
-		ball
-			.dom(imageJson.ball)
+		ball.dom(imageJson.ball)
 			.width(imageJson.ball.width)
 			.height(imageJson.ball.height)
 			.x(200)
-			.y(10)
-			.content(function(){
-				this.drawImage();
-			})
+			.y(10);
+		ball.content = function(){
+			this.drawImage();
+		};
 		
-		//层绘制
-		mainDiv
-			.clearRect()
-			.addSprite(you)
-			.addSprite(sister)
-			.addSprite(ball);
+		//层添加精灵
+		mainDiv.addChild([you,sister,ball])
+				.drawChild();
 		
-		//主层绘制
-		body
-			.clearRect()
-			.drawImage(mainDiv);
-		setTimeout(gameStar,100)
+		mainDiv.on("click",mainDivClick)
 	}
 	
-	function gameUp(){
-		requestAnimationFrame(gameUp)
-	}
+	function mainDivClick(){}
 	
 	
 </script>
