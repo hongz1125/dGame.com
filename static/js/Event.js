@@ -1,6 +1,7 @@
 //-----------------------------------精灵事件
 Base.prototype.on = function(type,FUN){
 	var self = this;
+	self.body.dom.Dtrigger = function(){alert(1);};
 	self.body.dom.addEventListener(type,FUN,false);
 	return self;
 }

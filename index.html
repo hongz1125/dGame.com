@@ -10,6 +10,7 @@
 <script src="static/js/preloadImages.js"></script>
 <script src="static/js/requestAnimationFrame.js"></script>
 <script src="static/js/Base.js"></script>
+<script src="static/js/Draw.js"></script>
 <script src="static/js/bump.js"></script>
 <script src="static/js/Body.js"></script>
 <script src="static/js/Event.js"></script>
@@ -52,13 +53,21 @@
 		imageAry:imageAry,
 		callCenter:gameLoader,
 		callReady:gameReady
-	})
+	});
 	
 	
 	function gameLoader(i,j){
-		loadingDiv = new Div("loadingDiv");
-		var background = new Sprite("background");
-		var text = new Sprite("text");
+		//声明图层 声明精灵 并添加
+		var loadingDiv = new Div();
+		body.addDiv({
+			"loadingDiv":loadingDiv
+		});
+		var background = new Sprite();
+		var text = new Sprite();
+		loadingDiv.addSprite({
+			"background":background,
+			"text":text
+		});
 		//精灵
 		background
 			.width(loadingDiv.width())
@@ -66,7 +75,7 @@
 		background.content = function(){
 			this.fillStyle("black")
 				.fillRect();
-		}
+		};
 		text
 			.width(loadingDiv.width())
 			.height(loadingDiv.height());
@@ -77,29 +86,30 @@
 				.font("bold 20px/40px Georgia")
 				.fillText(i+"/"+j);
 		};
-		//层绘制
-		loadingDiv
-			.clearRect()
-			.addSprite(background)
-			.addSprite(text);
-		
 		//主层绘制
-		body
-			.clearRect()
-			.drawImage(loadingDiv);
+		loadingDiv.drawChild();
 	}
 
 	function gameReady(json){
 		imageJson = json;
 		
-		readyDiv = new Div("readyDiv");
+		//声明图层 声明精灵 并添加
+		var readyDiv = new Div();
+		body.addDiv({
+			"readyDiv":readyDiv
+		});
 		var background = new Sprite();
 		var start = new Sprite();
+		readyDiv.addSprite({
+			"background":background,
+			"start":start
+		});
+		
 		
 		//精灵
 		background
-			.width(loadingDiv.width())
-			.height(loadingDiv.height());
+			.width(readyDiv.width())
+			.height(readyDiv.height());
 		background.content = function(){
 			this.fillStyle("black")
 				.fillRect();
@@ -108,8 +118,8 @@
 		start
 			.width(100)
 			.height(40)
-			.x(loadingDiv.width()/2 - 100/2)
-			.y(loadingDiv.height()/2 - 40/2)
+			.x(readyDiv.width()/2 - 100/2)
+			.y(readyDiv.height()/2 - 40/2);
 		start.content = function(){
 				this.fillStyle("#aaa")
 					.fillRect()
@@ -124,33 +134,33 @@
 			start.off("mouseup",startClick);//取消事件
 			gameStar();//运行游戏开始
 		}
-		//层绘制
-		readyDiv
-			.clearRect()
-			.addSprite(background)
-			.addSprite(start);
-		
-		//主层绘制
-		body
-			.clearRect()
-			.drawImage(readyDiv);
+		//绘制层
+		readyDiv.drawChild();
 	}
 	
 	function gameStar(){
-		mainDiv = new Div("mainDiv");
-		var you = new Sprite("you");
-		var sister = new Sprite("sister");
-		var ball = new Sprite("ball");
+		
+		//声明图层 声明精灵 并添加
+		var mainDiv = new Div();
+		body.addDiv({
+			"mainDiv":mainDiv
+		});
+		var you = new Sprite();
+		var sister = new Sprite();
+		var ball = new Sprite();
+		mainDiv.addSprite({
+			"you":you,
+			"sister":sister,
+			"ball":ball
+		});
+		
 		
 		//精灵
-		
 		list = dyadicArray(1900,100,1,19);
-		
-		
 		you
 			.dom(imageJson.you)
-			.sx(list[0][1].x)
-			.sy(list[0][1].y)
+			.sx(list[0][0].x)
+			.sy(list[0][0].y)
 			.swidth(100)
 			.sheight(100)
 			.x(10)
@@ -160,19 +170,25 @@
 		you.content = function(){
 			this.drawImage();
 		};
-		you.doThrow = function(){
-			listCol++;
-			listCol = listCol>=19 ? 19 : listCol;
-			you.sx(list[0][listCol].x)
-				.sy(list[0][listCol].y)
-		}
+		you.throwDo = function(){
+			console.log(listCol)
+			this.sx(list[0][listCol].x)
+				.sy(list[0][listCol].y);
+			if(listCol>=18){
+				listCol = 0;
+				this.throwVal = 0;
+			}else{
+				listCol++
+			}
+		};
+		you.throwVal = 0;
 			
 		sister
 			.dom(imageJson.sister)
 			.width(imageJson.sister.width)
 			.height(imageJson.sister.height)
 			.x(10)
-			.y(10)
+			.y(10);
 		sister.content = function(){
 			this.drawImage();
 		};
@@ -187,13 +203,25 @@
 		};
 		
 		//层添加精灵
-		mainDiv.addChild([you,sister,ball])
-				.drawChild();
-		
-		mainDiv.on("click",mainDivClick)
+		mainDiv.drawChild();
+		mainDiv.on("click",mainDivClick);
+		setTimeout(mainDivFrame,100);
 	}
 	
-	function mainDivClick(){}
+	function mainDivFrame(){
+		var self = this;
+		if(body.find("you").throwVal){
+			body.find("you").throwDo();
+		}
+		body.find("mainDiv").drawChild();
+		//console.log(1)
+		setTimeout(mainDivFrame,100);
+	}
+	
+	function mainDivClick(){
+		var a = body.find("you");
+		a.throwVal= 1;
+	}
 	
 	
 </script>

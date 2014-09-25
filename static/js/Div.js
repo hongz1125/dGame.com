@@ -9,16 +9,15 @@ function Div(name){
 	self._width	= self.dom.width = self.body.width();
 	self._height = self.dom.height = self.body.height();
 	self.divName = name;
-	self._child = [];
+	self._child = {};
 }
 //继承
 Div.prototype = new Base();
-//添加精灵到图层并设置ctx
-Div.prototype.addChild = function(ary){
+Div.prototype.addSprite = function(json){
 	var self = this;
-	self._child = ary;
-	for(var i in ary){
-		ary[i].ctx = self.ctx;
+	for(var i in json){
+		self._child[i] = json[i];
+		json[i].ctx = self.ctx;
 	}
 	return self;
 }
