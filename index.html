@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+	<title>game</title>
+	<meta charset="utf-8">
 </head>
 
 <body style="background:#fefefe">
-<canvas id="demo" width="500" height="300" style="background:#f1f1f1"></canvas>
+<canvas id="demo" width="500" height="300" style="background:#f1f1f1;">no?</canvas>
 
 <script src="static/js/preloadImages.js"></script>
 <script src="static/js/requestAnimationFrame.js"></script>
-<script src="static/js/Base.js"></script>
-<script src="static/js/Draw.js"></script>
 <script src="static/js/bump.js"></script>
 <script src="static/js/Body.js"></script>
-<script src="static/js/Event.js"></script>
 <script src="static/js/Div.js"></script>
 <script src="static/js/Sprite.js"></script>
+<script src="static/js/Draw.js"></script>
+<script src="static/js/Event.js"></script>
 
 
 <script>
@@ -43,7 +43,11 @@
 	mainDiv,
 	imageJson,
 	list=0,
-	listCol=0;
+	listCol=0,
+	lastTime=0,//记录最后执行动画时间
+	lastUpTime=0,//记录最后执行动画时间
+	lastTime=0,//记录最后执行动画时间
+	other;
 	
 	
 	//初始化游戏
@@ -70,15 +74,15 @@
 		});
 		//精灵
 		background
-			.width(loadingDiv.width())
-			.height(loadingDiv.height());
+			.width(body.width)
+			.height(body.height);
 		background.content = function(){
 			this.fillStyle("black")
 				.fillRect();
 		};
 		text
-			.width(loadingDiv.width())
-			.height(loadingDiv.height());
+			.width(body.width)
+			.height(body.height);
 		text.content = function(){
 			this.fillStyle("white")
 				.textAlign("center")
@@ -87,11 +91,11 @@
 				.fillText(i+"/"+j);
 		};
 		//主层绘制
-		loadingDiv.drawChild();
+		loadingDiv.childDraw();
 	}
 
-	function gameReady(json){
-		imageJson = json;
+	function gameReady(data){
+		body.data = data;
 		
 		//声明图层 声明精灵 并添加
 		var readyDiv = new Div();
@@ -108,8 +112,8 @@
 		
 		//精灵
 		background
-			.width(readyDiv.width())
-			.height(readyDiv.height());
+			.width(body.width)
+			.height(body.height);
 		background.content = function(){
 			this.fillStyle("black")
 				.fillRect();
@@ -118,8 +122,8 @@
 		start
 			.width(100)
 			.height(40)
-			.x(readyDiv.width()/2 - 100/2)
-			.y(readyDiv.height()/2 - 40/2);
+			.x(body.width/2 - 100/2)
+			.y(body.height/2 - 40/2);
 		start.content = function(){
 				this.fillStyle("#aaa")
 					.fillRect()
@@ -131,11 +135,11 @@
 		start.on("click",startClick);
 		function startClick(event){
 			if(!mouseToSprite(event,start)){return false;};
-			start.off("mouseup",startClick);//取消事件
+			start.off("click",startClick);//取消事件
 			gameStar();//运行游戏开始
 		}
 		//绘制层
-		readyDiv.drawChild();
+		readyDiv.childDraw();
 	}
 	
 	function gameStar(){
@@ -148,81 +152,175 @@
 		var you = new Sprite();
 		var sister = new Sprite();
 		var ball = new Sprite();
+		var line = new Sprite();
+		var S_fps = new Sprite();
 		mainDiv.addSprite({
 			"you":you,
 			"sister":sister,
-			"ball":ball
+			"ball":ball,
+			"line":line,
+			"S_fps":S_fps
 		});
 		
 		
 		//精灵
 		list = dyadicArray(1900,100,1,19);
 		you
-			.dom(imageJson.you)
+			.dom(body.data["you"])
 			.sx(list[0][0].x)
 			.sy(list[0][0].y)
 			.swidth(100)
 			.sheight(100)
-			.x(10)
+			.x(0)
 			.y(200)
 			.width(100)
 			.height(100);
+		you.anim = 0;
+		you.animNum = 0;
+		you.animFps = 60;
+		you.animLastTime = 0;
 		you.content = function(){
 			this.drawImage();
 		};
-		you.throwDo = function(){
-			console.log(listCol)
-			this.sx(list[0][listCol].x)
-				.sy(list[0][listCol].y);
-			if(listCol>=18){
-				listCol = 0;
-				this.throwVal = 0;
+		you.doThrow = function(event){
+			var you  = this;
+			this.sx(list[0][you.animNum].x)
+				.sy(list[0][you.animNum].y);
+			if(you.animNum>=18){
+				you.animNum = 0;
+				you.anim = 0;
 			}else{
-				listCol++
+				you.animNum++;
 			}
 		};
-		you.throwVal = 0;
-			
 		sister
-			.dom(imageJson.sister)
-			.width(imageJson.sister.width)
-			.height(imageJson.sister.height)
-			.x(10)
-			.y(10);
+			.dom(body.data["sister"])
+			.width(body.data["sister"].width)
+			.height(body.data["sister"].height)
+			.x(470)
+			.y(250);
+		sister.anim = 0;
+		sister.animStarTime = 1000;
+		sister.animFps = 0;
+		sister.animSpeedX = 1;
+		sister.animSpeedY = 0;
+		sister.animSpeedG = 0;
+		sister.animLastTime = (+new Date);
 		sister.content = function(){
 			this.drawImage();
 		};
-
-		ball.dom(imageJson.ball)
-			.width(imageJson.ball.width)
-			.height(imageJson.ball.height)
-			.x(200)
-			.y(10);
+		sister.doFly = function(){
+			var sister = this;
+			sister.x(sister.x()+sister.animSpeedX);
+			//sister.animSpeedY = sister.animSpeedY + sister.animSpeedG;
+			if(sister.x() > body.width){
+				//sister.anim = 0;
+				sister.x(-50);
+			}
+		};
+		ball.dom(body.data["ball"])
+			.width(body.data["ball"].width)
+			.height(body.data["ball"].height)
+			.x(42)
+			.y(244);
+		ball.anim = 0;
+		ball.animFps = 0;
+		ball.animLastTime = 0;
+		ball.s_gravity = 9.81;//重力加速度
+		ball.s_launchAngle = 0;//角度
+		ball.s_velocityX = 0;//发射x速度
+		ball.s_velocityY = 0;//发射y速度
+		ball.s_pixelToMeter = 10;//发射速度
 		ball.content = function(){
 			this.drawImage();
 		};
+		ball.doFire = function(){
+			var self = this;
+			console.log(self);
+			self.doPosition(60);
+			self.doRemove();
+		};
+		ball.doVelocity = function(event){
+			var self = this;
+			var x = event.offsetX - self.x();
+			var y = event.offsetY - self.y();
+			var z = Math.floor(Math.sqrt(x*x + y*y));
+			self.s_launchAngle = y/x;//计算弧度
+			self.s_velocity = (y/Math.sin(self.s_launchAngle))/self.s_pixelToMeter;//计算Z轴
+			self.s_velocityX = self.s_velocity*Math.cos(self.s_launchAngle);//计算X轴
+			self.s_velocityY = self.s_velocity*Math.sin(self.s_launchAngle);//计算Y轴
+		};
+		ball.doPosition = function(fps){
+			var self = this;
+			self.s_velocityY = self.s_velocityY*fps - 	self.s_velocityY*Math.sin(self.s_launchAngle);
+			self.x(self._x + (self.s_velocityX*fps*ball.s_pixelToMeter))
+				.y(self._y + (self.s_velocityY*fps*ball.s_pixelToMeter));
+			self.doRemove();
+		}
+		ball.doRemove = function(){
+			var self = this;
+			if(self._x < 0 ||self._y < 0 ||self._y > 500 || self._x > 500){
+				self.anim = 0;
+			}
+		}
 		
+		
+		line.content = function(){
+			this.moveTo(45,244)
+				.lineTo(this.x(),this.y())
+				.strokeStyle("#ccc")
+				.stroke();
+		};
+		
+		S_fps.width(20)
+			.height(20)
+			.x(0)
+			.y(280)
+			.fillStyle("#999");
+		S_fps.content = function(){
+			this.fillText(calculateFps().toFixed());
+		};
 		//层添加精灵
-		mainDiv.drawChild();
-		mainDiv.on("click",mainDivClick);
-		setTimeout(mainDivFrame,100);
+		mainDiv.childDraw();
+		body.dom.addEventListener("click",mainDivClick,false);
+		body.dom.addEventListener("mousemove",mainDivMove,false);
+		requestAnimationFrame(mainDivFrame);
 	}
 	
 	function mainDivFrame(){
-		var self = this;
-		if(body.find("you").throwVal){
-			body.find("you").throwDo();
+		var you = body.find("you");
+		var sister = body.find("sister");
+		var ball = body.find("ball");
+		var now = (+new Date);
+		if(you.anim && now - you.animLastTime > you.animFps){
+			you.animLastTime = now;
+			you.doThrow();
 		}
-		body.find("mainDiv").drawChild();
-		//console.log(1)
-		setTimeout(mainDivFrame,100);
+		if(sister.anim && now - sister.animLastTime > sister.animFps){
+			sister.animLastTime = now;
+			sister.doFly();
+		}
+		if(ball.anim && now - ball.animLastTime > ball.animFps){
+			console.log("re");
+			ball.animLastTime = now;
+			ball.doFire();
+		}
+		body.find("mainDiv").childDraw();
+		requestAnimationFrame(mainDivFrame);
 	}
-	
-	function mainDivClick(){
-		var a = body.find("you");
-		a.throwVal= 1;
+	function mainDivClick(event){
+		var you = body.find("you");
+		you.anim = 1;
+		var ball = body.find("ball");
+		ball.doVelocity(event);
+		ball.anim = 1;
 	}
-	
+	function mainDivMove(event){
+		var line = body.find("line");
+		line.x(event.offsetX)
+			.y(event.offsetY);
+		//console.log(event)
+	}
 	
 </script>
 </body>

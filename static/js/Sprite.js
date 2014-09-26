@@ -1,21 +1,41 @@
 /*
  * 精灵类
  * */
-function Sprite(name){
-	this._x=0;
-	this._y=0;
-	this._width=0;
-	this._height=0;
-	this._animate = false;
-	this.velocityX=0;
-	this.velocityY=0;
-	this.spriteName = name || "";
+function Sprite(){
+	this._sx 		= undefined;
+	this._sy 		= undefined;
+	this._swidth	= undefined;
+	this._sx 		= undefined;
+	this._sheight	=undefined;
+	this._x			=0;
+	this._y			=0;
+	this._width		=0;
+	this._height	=0;
+	this.visible 	= 1;
 }
-//继承
-Sprite.prototype = new Base();
+
+//精灵自身绘画方法
+Sprite.prototype.content = function(){
+	//this.content = FUN;
+}
+
+
+
+
+
 //------------------------------------属性
 //图片获取X定位
-Base.prototype.sx = function(num){
+Sprite.prototype.dom = function(dom){
+	var self = this;
+	if(dom != undefined){
+		self._dom = dom;
+		return self;
+	}else{
+		return self._dom;
+	}
+}
+//图片获取X定位
+Sprite.prototype.sx = function(num){
 	var self = this;
 	if(num != undefined){
 		self._sx = num;
@@ -25,7 +45,7 @@ Base.prototype.sx = function(num){
 	}
 }
 //图片获取Y定位
-Base.prototype.sy = function(num){
+Sprite.prototype.sy = function(num){
 	var self = this;
 	if(num != undefined){
 		self._sy = num;
@@ -35,7 +55,7 @@ Base.prototype.sy = function(num){
 	}
 }
 //图片获取宽度
-Base.prototype.swidth = function(num){
+Sprite.prototype.swidth = function(num){
 	var self = this;
 	if(num != undefined){
 		self._swidth = num;
@@ -45,7 +65,7 @@ Base.prototype.swidth = function(num){
 	}
 }
 //图片获取高度
-Base.prototype.sheight = function(num){
+Sprite.prototype.sheight = function(num){
 	var self = this;
 	if(num != undefined){
 		self._sheight = num;
@@ -55,7 +75,7 @@ Base.prototype.sheight = function(num){
 	}
 }
 //x
-Base.prototype.x = function(num){
+Sprite.prototype.x = function(num){
 	var self = this;
 	if(num != undefined){
 		self._x = num;
@@ -65,7 +85,7 @@ Base.prototype.x = function(num){
 	}
 }
 //y
-Base.prototype.y = function(num){
+Sprite.prototype.y = function(num){
 	var self = this;
 	if(num != undefined){
 		self._y = num;
@@ -75,7 +95,7 @@ Base.prototype.y = function(num){
 	}
 }
 //宽度
-Base.prototype.width = function(num){
+Sprite.prototype.width = function(num){
 	var self = this;
 	if(num != undefined){
 		self._width = num;
@@ -85,7 +105,7 @@ Base.prototype.width = function(num){
 	}
 }
 //高度
-Base.prototype.height = function(num){
+Sprite.prototype.height = function(num){
 	var self = this;
 	if(num != undefined){
 		self._height = num;
@@ -95,30 +115,6 @@ Base.prototype.height = function(num){
 	}
 }
 
-//------------------------------------宽高
-//精灵dom
-Base.prototype.dom = function(dom){
-	var self = this;
-	if(dom){
-		self.dom = dom;
-		return self;
-	}else{
-		return self._dom
-	}
-}
-//精灵自身绘画方法
-Sprite.prototype.content = function(){
-	//this.content = FUN;
-}
-//精灵动画属性
-Sprite.prototype.animate = function(bool){
-	if(bool != undefined){
-		self._animate = bool;//写入值
-		return self;
-	}else{
-		return self._animate;//返回值
-	}
-}
 
 
 

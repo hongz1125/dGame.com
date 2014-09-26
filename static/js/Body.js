@@ -2,46 +2,65 @@
  * 主画布类
  * */
 function Body(id){
+	
 	var self = this;
 	self.dom = document.getElementById(id);
 	self.ctx = self.dom.getContext("2d");
-	self._width = self.dom.width;
-	self._height = self.dom.height;
-	Base.prototype.body = self;
-	self._child = {};
+	self.width = self.dom.width;
+	self.height = self.dom.height;
+	
+	self.childSprite = {};
+	self.childDiv = {};
 }
-Body.prototype = new Base();
 Body.prototype.addDiv = function(json){
 	var self = this;
 	for(var i in json){
-		self._child[i] = json[i];
+		var s = json[i];
+		self.childDiv[i] = s;
+		s.body = self;
 	}
 	return self;
 }
-
+Body.prototype.clearRect = function(){
+	var self= this;
+	self.ctx.clearRect(0,0,self.width,self.height);
+	return self;
+}
+//查找子元素 包括数组
 Body.prototype.find = function(name){
 	var self = this;
-	var ary = [];
-	function doSome(selfA){
-		if(selfA && selfA._child){
-			for(var i in selfA._child){
-				var selfC = selfA._child[i];
-				if(i == name){
-					ary.push(selfC);
+	for(var i in self.childDiv){
+		var s = self.childDiv[i];
+		if(i == name){
+			return s;
+		}else{
+			if(s && s.childSprite){
+				for(var j in s.childSprite){
+					if(j == name){
+						return s.childSprite[j];
+					}
 				}
-				doSome(selfC);
 			}
 		}
 	}
-	doSome(self);
-	if(ary.length == 0){
-		return false;
-	}else if(ary.length == 1){
-		return ary[0]
-	}else{
-		return ary;
-	}
+	console.log("nofind:" + name)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

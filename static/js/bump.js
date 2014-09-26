@@ -26,3 +26,41 @@ function dyadicArray(w, h, row, col) {
 	}
 	return r;
 };
+/*
+ * 计算帧率fps
+ * 
+ */
+function calculateFps(){
+	var now = (+new Date);
+	var time = (now - lastTime) || 1;
+	var fps = 1000/time;
+	lastTime = now;
+	return fps;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

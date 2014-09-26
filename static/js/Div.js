@@ -1,32 +1,33 @@
 /*
  * 层类
  * */
-function Div(name){
+function Div(){
 	var self = this;
-	self.dom = document.createElement("canvas");
-	self.ctx = self.dom.getContext("2d");
-
-	self._width	= self.dom.width = self.body.width();
-	self._height = self.dom.height = self.body.height();
-	self.divName = name;
-	self._child = {};
+	self.childSprite = {};
 }
 //继承
-Div.prototype = new Base();
 Div.prototype.addSprite = function(json){
 	var self = this;
 	for(var i in json){
-		self._child[i] = json[i];
-		json[i].ctx = self.ctx;
+		var s = json[i];
+		self.childSprite[i] = s;
+		s.body = self.body;
+		s.ctx = s.body.ctx;
 	}
 	return self;
 }
-Div.prototype.drawChild = function(){
+Div.prototype.childDraw = function(){
 	var self = this;
-	self.clearRect();
-	for(var i in self._child){
-		self._child[i].content();//绘制每个精灵到临时图层
+	self.body.clearRect();
+	for(var i in self.childSprite){
+		var s = self.childSprite[i];
+		if(s.visible){
+			s.body.ctx.save()
+			s.body.ctx.beginPath();
+			s.content();//绘制每个精灵到图层
+			s.body.ctx.closePath();
+			s.body.ctx.restore();
+		}
 	}
-	self.body.clearRect().drawImage(self);//绘制临时图层到主图层
 	return self;
 }

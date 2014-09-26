@@ -27,6 +27,3 @@ function imgLoad(json){
 		}
 	}
 }
-function callCenter(){
-	
-}

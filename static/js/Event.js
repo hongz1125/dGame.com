@@ -1,12 +1,7 @@
 //-----------------------------------精灵事件
-Base.prototype.on = function(type,FUN){
-	var self = this;
-	self.body.dom.Dtrigger = function(){alert(1);};
-	self.body.dom.addEventListener(type,FUN,false);
-	return self;
+Sprite.prototype.on = function(type,FUN){
+	body.dom.addEventListener(type,FUN,false);
 }
-Base.prototype.off = function(type,FUN){
-	var self = this;
-	self.body.dom.removeEventListener(type,FUN,false);
-	return self;
+Sprite.prototype.off = function(type,FUN){
+	body.dom.removeEventListener(type,FUN,false);
 }
