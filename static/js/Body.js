@@ -18,30 +18,51 @@ Body.prototype.addDiv = function(json){
 	}
 	return self;
 }
-
+//查找子元素 包括数组
 Body.prototype.find = function(name){
 	var self = this;
-	var ary = [];
-	function doSome(selfA){
-		if(selfA && selfA._child){
-			for(var i in selfA._child){
-				var selfC = selfA._child[i];
-				if(i == name){
-					ary.push(selfC);
+	for(var i in self._child){
+		var nowObj = self._child[i];
+		if(i == name){
+			return nowObj;
+		}else{
+			if(nowObj && nowObj._child){
+				for(var j in nowObj._child){
+					if(j == name){
+						return nowObj._child[j];
+					}
 				}
-				doSome(selfC);
 			}
 		}
 	}
-	doSome(self);
-	if(ary.length == 0){
-		return false;
-	}else if(ary.length == 1){
-		return ary[0]
-	}else{
-		return ary;
-	}
+	console.log("nofind:" + name)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

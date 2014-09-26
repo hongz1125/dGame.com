@@ -110,16 +110,6 @@ Base.prototype.dom = function(dom){
 Sprite.prototype.content = function(){
 	//this.content = FUN;
 }
-//精灵动画属性
-Sprite.prototype.animate = function(bool){
-	if(bool != undefined){
-		self._animate = bool;//写入值
-		return self;
-	}else{
-		return self._animate;//返回值
-	}
-}
-
 
 
 

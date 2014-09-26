@@ -43,7 +43,11 @@
 	mainDiv,
 	imageJson,
 	list=0,
-	listCol=0;
+	listCol=0,
+	lastTime=0,//记录最后执行动画时间
+	lastUpTime=0,//记录最后执行动画时间
+	lastTime=0,//记录最后执行动画时间
+	other;
 	
 	
 	//初始化游戏
@@ -148,10 +152,12 @@
 		var you = new Sprite();
 		var sister = new Sprite();
 		var ball = new Sprite();
+		var S_fps = new Sprite();
 		mainDiv.addSprite({
 			"you":you,
 			"sister":sister,
-			"ball":ball
+			"ball":ball,
+			"S_fps":S_fps
 		});
 		
 		
@@ -167,32 +173,49 @@
 			.y(200)
 			.width(100)
 			.height(100);
+		you.anim = 0;
+		you.animNum = 0;
+		you.animFps = 60;
+		you.animLastTime = 0;
 		you.content = function(){
 			this.drawImage();
 		};
 		you.throwDo = function(){
-			console.log(listCol)
-			this.sx(list[0][listCol].x)
-				.sy(list[0][listCol].y);
-			if(listCol>=18){
-				listCol = 0;
-				this.throwVal = 0;
+			var you  = this;
+			this.sx(list[0][you.animNum].x)
+				.sy(list[0][you.animNum].y);
+			if(you.animNum>=18){
+				you.animNum = 0;
+				you.anim = 0;
 			}else{
-				listCol++
+				you.animNum++
 			}
 		};
-		you.throwVal = 0;
-			
 		sister
 			.dom(imageJson.sister)
 			.width(imageJson.sister.width)
 			.height(imageJson.sister.height)
-			.x(10)
+			.x(-50)
 			.y(10);
+		sister.anim = 0;
+		sister.animStarTime = 1000;
+		sister.animFps = 0;
+		sister.animSpeedX = 1;
+		sister.animSpeedY = 0;
+		sister.animSpeedG = 0;
+		sister.animLastTime = (+new Date);
 		sister.content = function(){
 			this.drawImage();
 		};
-
+		sister.doFly = function(){
+			var sister = this;
+			sister.x(sister.x()+sister.animSpeedX);
+			//sister.animSpeedY = sister.animSpeedY + sister.animSpeedG;
+			if(sister.x() > body.width()){
+				//sister.anim = 0;
+				sister.x(-50);
+			}
+		}
 		ball.dom(imageJson.ball)
 			.width(imageJson.ball.width)
 			.height(imageJson.ball.height)
@@ -202,25 +225,52 @@
 			this.drawImage();
 		};
 		
+		S_fps.width(20)
+			.height(20)
+			.x(0)
+			.y(280)
+			.fillStyle("#999");
+		S_fps.content = function(){
+			this.fillText(calculateFps().toFixed());
+		}
+		
+		
 		//层添加精灵
 		mainDiv.drawChild();
-		mainDiv.on("click",mainDivClick);
-		setTimeout(mainDivFrame,100);
+		body.dom.addEventListener("click",mainDivClick,false);
+		setTimeout(mainDivTimeTask,0)
+		requestAnimationFrame(mainDivFrame);
 	}
 	
 	function mainDivFrame(){
-		var self = this;
-		if(body.find("you").throwVal){
-			body.find("you").throwDo();
+		
+		var you = body.find("you");
+		var sister = body.find("sister");
+		var now = (+new Date);
+		if(you.anim && now - you.animLastTime > you.animFps){
+			you.animLastTime = now;
+			you.throwDo();
+		}
+		if(sister.anim && now - sister.animLastTime > sister.animFps){
+			sister.animLastTime = now;
+			sister.doFly();
 		}
 		body.find("mainDiv").drawChild();
-		//console.log(1)
-		setTimeout(mainDivFrame,100);
+		requestAnimationFrame(mainDivFrame);
 	}
-	
 	function mainDivClick(){
-		var a = body.find("you");
-		a.throwVal= 1;
+		var you = body.find("you");
+		if(you.anim == 1){
+			return false;	
+		}else{
+			you.anim = 1;
+			
+		};
+	}
+	function mainDivTimeTask(){
+		var sister = body.find("sister");
+		//console.log(sister);
+		sister.anim = 1;
 	}
 	
 	
