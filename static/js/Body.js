@@ -21,7 +21,6 @@ Body.prototype.addDiv = function(json){
 	}
 	return self;
 }
-<<<<<<< HEAD
 Body.prototype.clearRect = function(){
 	var self= this;
 	self.ctx.clearRect(0,0,self.width,self.height);
@@ -39,20 +38,6 @@ Body.prototype.find = function(name){
 				for(var j in s.childSprite){
 					if(j == name){
 						return s.childSprite[j];
-=======
-//查找子元素 包括数组
-Body.prototype.find = function(name){
-	var self = this;
-	for(var i in self._child){
-		var nowObj = self._child[i];
-		if(i == name){
-			return nowObj;
-		}else{
-			if(nowObj && nowObj._child){
-				for(var j in nowObj._child){
-					if(j == name){
-						return nowObj._child[j];
->>>>>>> d941898ca8cb987a44f274143b5375b7fe0ae2be
 					}
 				}
 			}
@@ -98,16 +83,3 @@ Body.prototype.find = function(name){
 
 
 
-<<<<<<< HEAD
-=======
-
-
-
-
-
-
-
-
-
-
->>>>>>> d941898ca8cb987a44f274143b5375b7fe0ae2be
