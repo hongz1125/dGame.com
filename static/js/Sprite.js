@@ -115,7 +115,25 @@ Sprite.prototype.height = function(num){
 	}
 }
 
+<<<<<<< HEAD
 
+=======
+//------------------------------------宽高
+//精灵dom
+Base.prototype.dom = function(dom){
+	var self = this;
+	if(dom){
+		self.dom = dom;
+		return self;
+	}else{
+		return self._dom
+	}
+}
+//精灵自身绘画方法
+Sprite.prototype.content = function(){
+	//this.content = FUN;
+}
+>>>>>>> d941898ca8cb987a44f274143b5375b7fe0ae2be
 
 
 

@@ -152,13 +152,19 @@
 		var you = new Sprite();
 		var sister = new Sprite();
 		var ball = new Sprite();
+<<<<<<< HEAD
 		var line = new Sprite();
+=======
+>>>>>>> d941898ca8cb987a44f274143b5375b7fe0ae2be
 		var S_fps = new Sprite();
 		mainDiv.addSprite({
 			"you":you,
 			"sister":sister,
 			"ball":ball,
+<<<<<<< HEAD
 			"line":line,
+=======
+>>>>>>> d941898ca8cb987a44f274143b5375b7fe0ae2be
 			"S_fps":S_fps
 		});
 		
@@ -182,7 +188,11 @@
 		you.content = function(){
 			this.drawImage();
 		};
+<<<<<<< HEAD
 		you.doThrow = function(event){
+=======
+		you.throwDo = function(){
+>>>>>>> d941898ca8cb987a44f274143b5375b7fe0ae2be
 			var you  = this;
 			this.sx(list[0][you.animNum].x)
 				.sy(list[0][you.animNum].y);
@@ -190,6 +200,7 @@
 				you.animNum = 0;
 				you.anim = 0;
 			}else{
+<<<<<<< HEAD
 				you.animNum++;
 			}
 		};
@@ -199,6 +210,17 @@
 			.height(body.data["sister"].height)
 			.x(470)
 			.y(250);
+=======
+				you.animNum++
+			}
+		};
+		sister
+			.dom(imageJson.sister)
+			.width(imageJson.sister.width)
+			.height(imageJson.sister.height)
+			.x(-50)
+			.y(10);
+>>>>>>> d941898ca8cb987a44f274143b5375b7fe0ae2be
 		sister.anim = 0;
 		sister.animStarTime = 1000;
 		sister.animFps = 0;
@@ -213,6 +235,7 @@
 			var sister = this;
 			sister.x(sister.x()+sister.animSpeedX);
 			//sister.animSpeedY = sister.animSpeedY + sister.animSpeedG;
+<<<<<<< HEAD
 			if(sister.x() > body.width){
 				//sister.anim = 0;
 				sister.x(-50);
@@ -231,6 +254,18 @@
 		ball.s_velocityX = 0;//发射x速度
 		ball.s_velocityY = 0;//发射y速度
 		ball.s_pixelToMeter = 10;//发射速度
+=======
+			if(sister.x() > body.width()){
+				//sister.anim = 0;
+				sister.x(-50);
+			}
+		}
+		ball.dom(imageJson.ball)
+			.width(imageJson.ball.width)
+			.height(imageJson.ball.height)
+			.x(200)
+			.y(10);
+>>>>>>> d941898ca8cb987a44f274143b5375b7fe0ae2be
 		ball.content = function(){
 			this.drawImage();
 		};
@@ -265,6 +300,7 @@
 		}
 		
 		
+<<<<<<< HEAD
 		line.content = function(){
 			this.moveTo(45,244)
 				.lineTo(this.x(),this.y())
@@ -272,6 +308,8 @@
 				.stroke();
 		};
 		
+=======
+>>>>>>> d941898ca8cb987a44f274143b5375b7fe0ae2be
 		S_fps.width(20)
 			.height(20)
 			.x(0)
@@ -279,15 +317,26 @@
 			.fillStyle("#999");
 		S_fps.content = function(){
 			this.fillText(calculateFps().toFixed());
+<<<<<<< HEAD
 		};
 		//层添加精灵
 		mainDiv.childDraw();
 		body.dom.addEventListener("click",mainDivClick,false);
 		body.dom.addEventListener("mousemove",mainDivMove,false);
+=======
+		}
+		
+		
+		//层添加精灵
+		mainDiv.drawChild();
+		body.dom.addEventListener("click",mainDivClick,false);
+		setTimeout(mainDivTimeTask,0)
+>>>>>>> d941898ca8cb987a44f274143b5375b7fe0ae2be
 		requestAnimationFrame(mainDivFrame);
 	}
 	
 	function mainDivFrame(){
+<<<<<<< HEAD
 		var you = body.find("you");
 		var sister = body.find("sister");
 		var ball = body.find("ball");
@@ -320,6 +369,36 @@
 		line.x(event.offsetX)
 			.y(event.offsetY);
 		//console.log(event)
+=======
+		
+		var you = body.find("you");
+		var sister = body.find("sister");
+		var now = (+new Date);
+		if(you.anim && now - you.animLastTime > you.animFps){
+			you.animLastTime = now;
+			you.throwDo();
+		}
+		if(sister.anim && now - sister.animLastTime > sister.animFps){
+			sister.animLastTime = now;
+			sister.doFly();
+		}
+		body.find("mainDiv").drawChild();
+		requestAnimationFrame(mainDivFrame);
+	}
+	function mainDivClick(){
+		var you = body.find("you");
+		if(you.anim == 1){
+			return false;	
+		}else{
+			you.anim = 1;
+			
+		};
+	}
+	function mainDivTimeTask(){
+		var sister = body.find("sister");
+		//console.log(sister);
+		sister.anim = 1;
+>>>>>>> d941898ca8cb987a44f274143b5375b7fe0ae2be
 	}
 	
 </script>
