@@ -18,7 +18,6 @@ Div.prototype.addSprite = function(json){
 }
 Div.prototype.childDraw = function(){
 	var self = this;
-	self.body.clearRect();
 	for(var i in self.childSprite){
 		var s = self.childSprite[i];
 		if(s.visible){
@@ -31,3 +30,12 @@ Div.prototype.childDraw = function(){
 	}
 	return self;
 }
+Div.prototype.childClearDraw = function(){//清楚画布并绘制
+	var self = this;
+	self.body.clearRect();
+	self.childDraw();
+	return self;
+}
+
+
+
