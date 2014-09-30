@@ -30,16 +30,34 @@ function dyadicArray(w, h, row, col) {
  * 计算帧率fps
  * 
  */
-function calculateFps(){
-	var now = (+new Date);
-	var time = (now - lastTime) || 1;
+function calculateFps(time){
+	var now = time || (+new Date);
+	var time = now - lastTime;
 	var fps = 1000/time;
 	lastTime = now;
 	return fps;
 }
 
-
-
+/*
+ * 绘制网格
+ * */
+function drawGrid(obj,step){
+	var ctx = obj.ctx;
+	var width = ctx.canvas.width;
+	var height = ctx.canvas.height;
+	var widthStep = width/step;
+	var heightStep = height/step;
+	for(var i=0;i<widthStep;i++){
+		ctx.moveTo(i*step+0.5,+0.5);
+		ctx.lineTo(i*step+0.5,height);
+	}
+	for(var j=0;j<heightStep;j++){
+		ctx.moveTo(0,j*step+0.5);
+		ctx.lineTo(width+0.5,j*step+0.5);
+	}
+	obj.strokeStyle("#ccc")
+	obj.stroke();
+}
 
 
 

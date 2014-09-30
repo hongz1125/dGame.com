@@ -95,3 +95,45 @@ Sprite.prototype.stroke = function(x,y){
 	return self;
 }
 
+
+Sprite.prototype.beginPath = function(){
+	var self = this;
+	self.ctx.beginPath();
+	return self;
+}
+Sprite.prototype.closePath = function(){
+	var self = this;
+	self.ctx.closePath();
+	return self;
+}
+
+
+
+//画布重映射
+Sprite.prototype.translate = function(x,y){
+	var self = this;
+	self.ctx.translate(x,y);
+	return self;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

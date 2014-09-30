@@ -51,7 +51,7 @@ var canvas = document.getElementById('canvas'),
     nearTreeOffset = 0,
 
     TREE_VELOCITY = 20,
-    FAST_TREE_VELOCITY = 40,
+    FAST_TREE_VELOCITY = 200,
     SKY_VELOCITY = 8,
     GRASS_VELOCITY = 75;
 

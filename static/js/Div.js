@@ -23,7 +23,7 @@ Div.prototype.childDraw = function(){
 		if(s.visible){
 			s.body.ctx.save()
 			s.body.ctx.beginPath();
-			s.content();//绘制每个精灵到图层
+			s.painter(s,body.ctx);//绘制每个精灵到图层
 			s.body.ctx.closePath();
 			s.body.ctx.restore();
 		}
@@ -36,6 +36,25 @@ Div.prototype.childClearDraw = function(){//清楚画布并绘制
 	self.childDraw();
 	return self;
 }
+
+Div.prototype.update = function(){
+	var self = this;
+	for(var i in self.childSprite){
+		var _s = self.childSprite[i];
+		_s.update();
+	}
+	return self;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

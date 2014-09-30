@@ -2,7 +2,6 @@
  * 主画布类
  * */
 function Body(id){
-	
 	var self = this;
 	self.dom = document.getElementById(id);
 	self.ctx = self.dom.getContext("2d");
@@ -11,6 +10,9 @@ function Body(id){
 	
 	self.childSprite = {};
 	self.childDiv = {};
+	
+	self.paused = 0;					//游戏是否在暂停状态
+	self.now = +(new Date); 			//游戏单前最新刷新时间
 }
 Body.prototype.addDiv = function(json){
 	var self = this;

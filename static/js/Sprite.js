@@ -5,19 +5,53 @@ function Sprite(){
 	this._sx 		= undefined;
 	this._sy 		= undefined;
 	this._swidth	= undefined;
-	this._sx 		= undefined;
-	this._sheight	=undefined;
-	this._x			=0;
-	this._y			=0;
-	this._width		=0;
-	this._height	=0;
-	this.visible 	= 1;
+	this._sheight	= undefined;
+	this._x			= undefined;
+	this._y			= undefined;
+	this._width		= undefined;
+	this._height	= undefined;
+	this.visible 	= 1;			//判断精灵是否在可是范围内
+	this.animating	= 0;			//判断精灵是否需要更新数据
+	this.action		= [];
+	this.ctx		= undefined;	//画布在add到div时候添加
+}
+Sprite.prototype.paint  = function(){
+	//绘制方法
+}
+//精灵自身绘画方法
+Sprite.prototype.painter = function(){
+	var self = this;
+	if(self.visible){
+		self.ctx.save()
+		self.ctx.beginPath();
+		self.paint();//绘制每个精灵到图层
+		self.ctx.closePath();
+		self.ctx.restore();
+	}
+	return self;
+}
+Sprite.prototype.addAction = function(name){
+	var self = this;
+	self.action[name] = new Animate();
+	self.action[name].name = name;
+	self.action[name].sprite = self;
+	return self;
 }
 
-//精灵自身绘画方法
-Sprite.prototype.content = function(){
-	//this.content = FUN;
+//精灵运行所有动画方法
+Sprite.prototype.update = function(){
+	var self = this;
+	for(var i in self.action){
+		var _s = self.action[i];
+		if(_s._actioning && body.now - _s._updateTime > _s._speed){
+			_s.action();console.log(1);
+			_s._updateTime = body.now;
+		}
+	}
+	return self;
 }
+
+
 
 
 
