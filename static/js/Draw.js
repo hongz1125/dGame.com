@@ -95,3 +95,12 @@ Sprite.prototype.stroke = function(x,y){
 	return self;
 }
 
+
+Sprite.prototype.beginPath = function(){
+	var self = this;
+	self.ctx.beginPath();
+	return self;
+}
+
+
+

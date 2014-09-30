@@ -7,7 +7,29 @@
 
 <body style="background:#fefefe">
 <canvas id="demo" width="500" height="300" style="background:#f1f1f1;">no?</canvas>
-<button onclick="gamePaused()">paused</button>
+<button onclick="bnPaused();">暂停</button> <button onclick="btnFire()">发射</button><br />
+力量：<input id="velocity" type="text" value="60" /> 0/100<br />
+角度：<input id="angle" type="text" value="45"/> 0/360<br />
+风力：<input id="wind" type="text"  value="5" /> -50 / 50<br />
+<br />
+
+<script>
+function bnPaused(){
+	if(!body.paused){
+		body.paused = 1;
+	}else{
+		body.paused = 0;
+	}
+}
+function btnFire(){
+	var angle = document.getElementById("angle").value;
+	var velocity = document.getElementById("velocity").value;
+	var wind = document.getElementById("wind").value;
+	
+	
+}
+</script>
+
 <script src="static/js/preloadImages.js"></script>
 <script src="static/js/requestAnimationFrame.js"></script>
 <script src="static/js/bump.js"></script>
@@ -238,13 +260,18 @@
 		ball.content = function(){
 			this.drawImage();
 		};
+		ball.setVelocity = function(){
+			ball.x(ball.baseX);
+			ball.y(ball.baseY);
+			ball.s_velocityX = line.nx*ball.s_pixelToMeter*100/200;
+			ball.s_velocityY = line.ny*ball.s_pixelToMeter*100/200;
+		};
 		ball.doFire = function(fps){
 			var self = this;
 			fps = 60
 			self.s_velocityY = ball.s_gravity/3 + self.s_velocityY;
 			self.x(self._x + (self.s_velocityX/fps))
 				.y(self._y + (self.s_velocityY/fps));
-			
 			console.log(self.s_velocityY)
 			//判断移除方法
 			if(self._y > 1000 || self._x > 1000){
@@ -254,22 +281,37 @@
 		
 		line.baseX = 42;
 		line.baseY = 244;
+		line.width(0)
+			.height(0)
+			.x(0)
+			.y(20);
 		line.content = function(){
 			var self = this;
 			self.moveTo(self.baseX,self.baseY)
-				.lineTo(self.x(),self.y())
+				.lineTo(self.lineX,self.lineY)
 				.strokeStyle("#ccc")
 				.stroke();
+			self.textAlign("left")
+				.textBaseline("top")
+				.y(20)
+				.beginPath()	
+				.fillText("力量:"+line.nz*100/200)   //转成按100计算
+				.y(40)
+				.beginPath()
+				.fillText("角度:"+line.angle);
 		};
 		
-		S_fps.width(20)
-			.height(20)
+		
+		S_fps.width(0)
+			.height(0)
 			.x(0)
-			.y(280)
+			.y(0)
 			.fillStyle("#999");
 		S_fps.content = function(){
 			body.fps = calculateFps();
-			this.fillText(body.fps.toFixed());
+			this.textAlign("left")
+				.textBaseline("top")
+				.fillText("FPS:"+body.fps.toFixed());
 		};
 		//层添加精灵
 		mainDiv.childClearDraw();
@@ -279,7 +321,7 @@
 	}
 	
 	function mainDivFrame(){
-		if(!window.paused){
+		if(!body.paused){
 			var you = body.find("you");
 			var sister = body.find("sister");
 			var ball = body.find("ball");
@@ -296,7 +338,7 @@
 				ball.animLastTime = now;
 				ball.doFire();
 			}
-			body.find("mainDiv").childDraw();
+			body.find("mainDiv").childClearDraw();
 		}
 		requestAnimationFrame(mainDivFrame);
 	}
@@ -306,32 +348,20 @@
 		you.anim = 1;
 		var ball = body.find("ball");
 		ball.anim = 1;
-		ball.s_velocityX = line.nx*ball.s_pixelToMeter;
-		ball.s_velocityY = line.ny*ball.s_pixelToMeter;
-		ball.x(ball.baseX);
-		ball.y(ball.baseY);
-		console.log(ball.s_velocityX,ball.s_velocityY)
+		ball.setVelocity();
 	}
 	function mainDivMove(event){
 		var line = body.find("line");
 		var ball = body.find("ball");
-		
 		var x = event.offsetX - line.baseX;
 		var y = event.offsetY - line.baseY;
 		var z = Math.sqrt(x*x+y*y);
-		var nz = z > 200 ? 200 : z;
-		line.nx = nz*x/z;
-		line.ny = nz*y/z;
-		line.x(line.nx+line.baseX)
-			.y(line.ny+line.baseY);
-	}
-	paused = 0;
-	function gamePaused(){
-		if(window.paused == 1){
-			window.paused = 0;
-		}else{
-			window.paused = 1;
-		}
+		line.nz = z > 200 ? 200 : z;
+		line.nx = line.nz*x/z;
+		line.ny = line.nz*y/z;
+		line.angle = Math.atan(line.ny/line.nx)*180/Math.PI;
+		line.lineX = line.nx+line.baseX;
+		line.lineY = line.ny+line.baseY;
 	}
 	
 </script>
