@@ -101,6 +101,7 @@ Sprite.prototype.beginPath = function(){
 	self.ctx.beginPath();
 	return self;
 }
+<<<<<<< HEAD
 Sprite.prototype.closePath = function(){
 	var self = this;
 	self.ctx.closePath();
@@ -134,6 +135,8 @@ Sprite.prototype.translate = function(x,y){
 
 
 
+=======
+>>>>>>> b6b61a676eeff903b91ff6b899e24ff372ed88dc
 
 
 
