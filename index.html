@@ -6,7 +6,6 @@
 </head>
 
 <body style="background:#fefefe">
-<<<<<<< HEAD
 <canvas id="demo" width="500" height="300" style="background:#f1f1f1;">no?</canvas><br />
 <button onclick="paused();">暂停</button><br />
 <button onclick="reset();">重新开始</button><br />
@@ -18,24 +17,12 @@
 
 <script>
 function paused(){
-=======
-<canvas id="demo" width="500" height="300" style="background:#f1f1f1;">no?</canvas>
-<button onclick="bnPaused();">暂停</button> <button onclick="btnFire()">发射</button><br />
-力量：<input id="velocity" type="text" value="60" /> 0/100<br />
-角度：<input id="angle" type="text" value="45"/> 0/360<br />
-风力：<input id="wind" type="text"  value="5" /> -50 / 50<br />
-<br />
-
-<script>
-function bnPaused(){
->>>>>>> b6b61a676eeff903b91ff6b899e24ff372ed88dc
 	if(!body.paused){
 		body.paused = 1;
 	}else{
 		body.paused = 0;
 	}
 }
-<<<<<<< HEAD
 function reset(){
 	window.location.href = window.location.href;
 }
@@ -48,14 +35,6 @@ function fire(){
 	ball.velocity = velocity;
 	ball.wind = wind;
 	body.find("you").action["cast"].actioning(1);
-=======
-function btnFire(){
-	var angle = document.getElementById("angle").value;
-	var velocity = document.getElementById("velocity").value;
-	var wind = document.getElementById("wind").value;
-	
-	
->>>>>>> b6b61a676eeff903b91ff6b899e24ff372ed88dc
 }
 </script>
 
@@ -322,7 +301,6 @@ function btnFire(){
 		ball.painter = function(){
 			this.drawImage();
 		};
-<<<<<<< HEAD
 		ball.addAction("fire");
 		ball.action["fire"].speed(0);
 		ball.action["fire"].setVelocity = function(){
@@ -357,52 +335,20 @@ function btnFire(){
 		line.angle = 0;
 		line.velocity = 0;
 		line.wind = Math.floor(Math.random()*100-50);	//风速
-=======
-		ball.setVelocity = function(){
-			ball.x(ball.baseX);
-			ball.y(ball.baseY);
-			ball.s_velocityX = line.nx*ball.s_pixelToMeter*100/200;
-			ball.s_velocityY = line.ny*ball.s_pixelToMeter*100/200;
-		};
-		ball.doFire = function(fps){
-			var self = this;
-			fps = 60
-			self.s_velocityY = ball.s_gravity/3 + self.s_velocityY;
-			self.x(self._x + (self.s_velocityX/fps))
-				.y(self._y + (self.s_velocityY/fps));
-			console.log(self.s_velocityY)
-			//判断移除方法
-			if(self._y > 1000 || self._x > 1000){
-				self.anim = 0;
-			}
-		};
-		
-		line.baseX = 42;
-		line.baseY = 244;
->>>>>>> b6b61a676eeff903b91ff6b899e24ff372ed88dc
 		line.width(0)
 			.height(0)
 			.x(0)
 			.y(20);
-<<<<<<< HEAD
 		line.painter = function(){
 			var self = this;
 			self.moveTo(self.baseX,self.baseY)
 				.lineTo(self.lineX,self.lineY)
 				.strokeStyle("#333")
-=======
-		line.content = function(){
-			var self = this;
-			self.moveTo(self.baseX,self.baseY)
-				.lineTo(self.lineX,self.lineY)
-				.strokeStyle("#ccc")
->>>>>>> b6b61a676eeff903b91ff6b899e24ff372ed88dc
 				.stroke();
 			self.textAlign("left")
 				.textBaseline("top")
 				.y(20)
 				.beginPath()	
-<<<<<<< HEAD
 				.fillText("力量:"+line.velocity)   //转成按100计算
 				.y(40)
 				.beginPath()
@@ -507,15 +453,6 @@ function btnFire(){
 			drawGrid(this,20);
 		};
 		
-=======
-				.fillText("力量:"+line.nz*100/200)   //转成按100计算
-				.y(40)
-				.beginPath()
-				.fillText("角度:"+line.angle);
-		};
-		
-		
->>>>>>> b6b61a676eeff903b91ff6b899e24ff372ed88dc
 		S_fps.width(0)
 			.height(0)
 			.x(0)
@@ -535,31 +472,11 @@ function btnFire(){
 	}
 	function mainDivFrame(){
 		if(!body.paused){
-<<<<<<< HEAD
 			body.now = (+new Date);
 			body.fps = calculateFps(body.now);
 			body.find("mainDiv")
 				.update()
 				.childClearDraw();
-=======
-			var you = body.find("you");
-			var sister = body.find("sister");
-			var ball = body.find("ball");
-			var now = (+new Date);
-			if(you.anim && now - you.animLastTime > you.animFps){
-				you.animLastTime = now;
-				you.doThrow();
-			}
-			if(sister.anim && now - sister.animLastTime > sister.animFps){
-				sister.animLastTime = now;
-				sister.doFly();
-			}
-			if(ball.anim && now - ball.animLastTime > ball.animFps){
-				ball.animLastTime = now;
-				ball.doFire();
-			}
-			body.find("mainDiv").childClearDraw();
->>>>>>> b6b61a676eeff903b91ff6b899e24ff372ed88dc
 		}
 		requestAnimationFrame(mainDivFrame);
 	}
@@ -567,7 +484,6 @@ function btnFire(){
 		var you = body.find("you");
 		var line = body.find("line");
 		var ball = body.find("ball");
-<<<<<<< HEAD
 		ball.angle=line.angle;
 		ball.velocity=line.velocity;
 		ball.wind=line.wind;
@@ -575,26 +491,12 @@ function btnFire(){
 	}
 	function mainDivMove(event){
 		var line = body.find("line");
-=======
-		ball.anim = 1;
-		ball.setVelocity();
-	}
-	function mainDivMove(event){
-		var line = body.find("line");
-		var ball = body.find("ball");
->>>>>>> b6b61a676eeff903b91ff6b899e24ff372ed88dc
 		var x = event.offsetX - line.baseX;
 		var y = event.offsetY - line.baseY;
 		var z = Math.sqrt(x*x+y*y);
 		line.nz = z > 200 ? 200 : z;
 		line.nx = line.nz*x/z;
 		line.ny = line.nz*y/z;
-<<<<<<< HEAD
-=======
-		line.angle = Math.atan(line.ny/line.nx)*180/Math.PI;
-		line.lineX = line.nx+line.baseX;
-		line.lineY = line.ny+line.baseY;
->>>>>>> b6b61a676eeff903b91ff6b899e24ff372ed88dc
 	}
 	
 </script>
