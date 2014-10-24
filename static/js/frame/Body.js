@@ -11,12 +11,8 @@ function Body(id){
 	self.childSprite = {};
 	self.childDiv = {};
 	
-<<<<<<< HEAD
 	self.paused = 0;					//游戏是否在暂停状态
 	self.now = +(new Date); 			//游戏单前最新刷新时间
-=======
-	self.paused = 0;
->>>>>>> b6b61a676eeff903b91ff6b899e24ff372ed88dc
 }
 Body.prototype.addDiv = function(json){
 	var self = this;

@@ -44,7 +44,7 @@ Sprite.prototype.update = function(){
 	for(var i in self.action){
 		var _s = self.action[i];
 		if(_s._actioning && body.now - _s._updateTime > _s._speed){
-			_s.action();console.log(1);
+			_s.action();
 			_s._updateTime = body.now;
 		}
 	}
@@ -116,7 +116,6 @@ Sprite.prototype.x = function(num){
 		return self;
 	}else{
 		return self._x
-	}
 }
 //y
 Sprite.prototype.y = function(num){
